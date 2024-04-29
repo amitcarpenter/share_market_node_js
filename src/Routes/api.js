@@ -23,7 +23,7 @@ const {
   getPaginatedData,
 } = require("../Controllers/Market/handleMarketController");
 const {
-  get_ls1_data,
+  ls1_data,
 } = require("../Controllers/Scanners/liveScannerController");
 
 // handle routing data
@@ -45,6 +45,7 @@ router.get("/callback", upstoxCallBack);
 router.get("/market-data", upstoxMarketData);
 router.get("/websocket-data", initializeAndConnect);
 router.get("/market/exchanges/:exchange", getPaginatedData);
-router.get("/get-ls1-data", get_ls1_data);
+
+router.post("/get-ls1-data", ls1_data);
 
 module.exports = { apiRoutes: router };

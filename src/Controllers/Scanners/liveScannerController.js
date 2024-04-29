@@ -1,6 +1,3 @@
-
-
-
 const LS1 = require("../../Models/scanners/LS1Modle");
 
 const getPreviousDay = (dateString) => {
@@ -9,9 +6,11 @@ const getPreviousDay = (dateString) => {
   return date.toISOString();
 };
 
-const get_ls1_data = async (req, res) => {
+const ls1_data = async (req, res) => {
   try {
-    const ls1_data = await LS1.find({}).lean().exec();
+    const { index, volume_threshold, rsi_threshold, close_number } = req.body;
+
+    const ls1_data = await LS1.find({ index: index }).lean().exec();
 
     if (!ls1_data || ls1_data.length === 0) {
       return res.status(400).json({ success: false, message: "No data found" });
@@ -22,18 +21,18 @@ const get_ls1_data = async (req, res) => {
     for (const stockData of ls1_data) {
       const dateString = stockData.Date;
       const previousDayDate = getPreviousDay(dateString);
-      
+
       let previous_day_high = null;
 
       try {
         const previousDayDocument = await LS1.findOne({
           Date: previousDayDate,
-          Symbol: stockData.Symbol
+          Symbol: stockData.Symbol,
         });
 
         if (previousDayDocument) {
           previous_day_high = previousDayDocument.High;
-          console.log(previous_day_high)
+          console.log(previous_day_high);
         } else {
           console.log(`No document found for ${previousDayDate}`);
           continue;
@@ -46,10 +45,10 @@ const get_ls1_data = async (req, res) => {
       }
 
       if (
-        stockData.Volume > 500000 &&
-        stockData.Close > 50 &&
-        stockData.RSI >= 60 &&
-        previous_day_high !== null && 
+        stockData.Volume > volume_threshold &&
+        stockData.Close > close_number &&
+        stockData.RSI >= rsi_threshold &&
+        previous_day_high !== null &&
         stockData.Close > previous_day_high &&
         stockData.Volume > stockData.Volume_MA_5
       ) {
@@ -68,4 +67,4 @@ const get_ls1_data = async (req, res) => {
   }
 };
 
-module.exports = { get_ls1_data };
+module.exports = { ls1_data };
