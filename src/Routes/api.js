@@ -24,6 +24,7 @@ const {
 } = require("../Controllers/Market/handleMarketController");
 const {
   ls1_data,
+  ls2_data,
 } = require("../Controllers/Scanners/liveScannerController");
 
 // handle routing data
@@ -47,5 +48,6 @@ router.get("/websocket-data", initializeAndConnect);
 router.get("/market/exchanges/:exchange", getPaginatedData);
 
 router.post("/get-ls1-data", ls1_data);
+router.post("/get-ls2-data", ls2_data);
 
 module.exports = { apiRoutes: router };
