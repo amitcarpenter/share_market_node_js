@@ -20,7 +20,7 @@ app.set("views", __dirname + "/views");
 
 app.use(express.static('public'));
 
-app.get("/", (req, res) => {
+app.get("/node/api", (req, res) => {
   res.send("Welcome, to the Share Market!");
 });
 
