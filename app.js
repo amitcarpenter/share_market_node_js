@@ -24,6 +24,14 @@ app.get("/node/api", (req, res) => {
   res.send("Welcome, to the Share Market!");
 });
 
+app.get("/node/api/", (req, res) => {
+  res.send("Welcome, to the Share Market!1");
+});
+
+app.get("/node/", (req, res) => {
+  res.send("Welcome, to the Share Market!node");
+});
+
 app.get("/market-data", (req, res) => {
   res.render("socket-data.ejs");
 });
